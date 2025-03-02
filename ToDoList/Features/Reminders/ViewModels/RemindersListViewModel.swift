@@ -9,9 +9,19 @@ import Foundation
 
 final class RemindersListViewModel: ObservableObject {
     @Published var reminders: [Reminder] = Reminder.samples
+    @Published var errorMessage: String?
+    
+    private var remindersRepository: RemindersRepository = RemindersRepository()
     
     func addReminder(_ reminder: Reminder) {
-        reminders.append(reminder)
+        do {
+            try remindersRepository.addReminder(reminder)
+            errorMessage = nil
+        }
+        catch {
+            print(error)
+            errorMessage = error.localizedDescription
+        }
     }
     
     func toggleCompleted(_ reminder: Reminder) {
