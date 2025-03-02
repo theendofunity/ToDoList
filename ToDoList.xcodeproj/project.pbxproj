@@ -11,7 +11,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		BC7FA6642D748B210059A036 /* ToDoList */ = {
+		BC7FA6932D74945C0059A036 /* ToDoList */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = ToDoList;
 			sourceTree = "<group>";
@@ -32,7 +32,7 @@
 		BC7FA6592D748B210059A036 = {
 			isa = PBXGroup;
 			children = (
-				BC7FA6642D748B210059A036 /* ToDoList */,
+				BC7FA6932D74945C0059A036 /* ToDoList */,
 				BC7FA6632D748B210059A036 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -61,7 +61,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				BC7FA6642D748B210059A036 /* ToDoList */,
+				BC7FA6932D74945C0059A036 /* ToDoList */,
 			);
 			name = ToDoList;
 			packageProductDependencies = (

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct RemindersListView: View {
     @State private var reminders = Reminder.samples
     @State private var isAddReminderDialogPresented = false
     
@@ -50,5 +50,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    RemindersListView()
 }
