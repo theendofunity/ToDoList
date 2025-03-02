@@ -8,15 +8,16 @@
 import SwiftUI
 
 struct RemindersListView: View {
-    @State private var reminders = Reminder.samples
     @State private var isAddReminderDialogPresented = false
+    
+    @StateObject private var viewModel = RemindersListViewModel()
     
     private func presentAddReminderView() {
         isAddReminderDialogPresented.toggle()
     }
     
     var body: some View {
-        List($reminders) { $reminder in
+        List($viewModel.reminders) { $reminder in
             HStack {
                 Image(systemName: reminder.isCompleted
                       ? "largecircle.fill.circle"
@@ -27,7 +28,7 @@ struct RemindersListView: View {
                 Text(reminder.title)
             }
             .onTapGesture {
-                reminder.isCompleted.toggle()
+                viewModel.toggleCompleted(reminder)
             }
         }
         .toolbar {
@@ -43,7 +44,7 @@ struct RemindersListView: View {
         }
         .sheet(isPresented: $isAddReminderDialogPresented) {
             AddReminderView { reminder in
-                reminders.append(reminder)
+                viewModel.addReminder(reminder)
             }
         }
     }
