@@ -8,14 +8,23 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var reminders = Reminder.samples
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
+        List($reminders) { $reminder in
+            HStack {
+                Image(systemName: reminder.isCompleted
+                      ? "largecircle.fill.circle"
+                      : "circle")
                 .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+                .foregroundStyle(.blue)
+                
+                Text(reminder.title)
+            }
+            .onTapGesture {
+                reminder.isCompleted.toggle()
+            }
         }
-        .padding()
     }
 }
 
