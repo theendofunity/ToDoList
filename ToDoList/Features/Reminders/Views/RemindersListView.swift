@@ -36,6 +36,7 @@ struct RemindersListView: View {
                 viewModel.addReminder(reminder)
             }
         }
+        .tint(.purple)
     }
 }
 
