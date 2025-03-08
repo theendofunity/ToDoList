@@ -19,6 +19,9 @@ struct RemindersListView: View {
     var body: some View {
         List($viewModel.reminders) { $reminder in
             RemindersListRowView(reminder: $reminder)
+                .onChange(of: reminder.isCompleted) { _, newValue in
+                    viewModel.setCompleted(reminder, isCompleted: newValue)
+                }
         }
         .toolbar {
             ToolbarItemGroup(placement: .bottomBar) {

@@ -30,9 +30,17 @@ final class RemindersListViewModel: ObservableObject {
         }
     }
     
-    func toggleCompleted(_ reminder: Reminder) {
-        if let index = reminders.firstIndex(where: { $0.id == reminder.id }) {
-            reminders[index].isCompleted.toggle()
+    func setCompleted(_ reminder: Reminder, isCompleted: Bool) {
+        var editedReminder = reminder
+        editedReminder.isCompleted = isCompleted
+        update(reminder: editedReminder)
+    }
+    
+    func update(reminder: Reminder) {
+        do {
+            try remindersRepository.update(reminder)
+        } catch {
+            errorMessage = error.localizedDescription
         }
     }
 }
