@@ -43,4 +43,8 @@ final class RemindersListViewModel: ObservableObject {
             errorMessage = error.localizedDescription
         }
     }
+    
+    func delete(_ reminder: Reminder) {
+        remindersRepository.remove(reminder)
+    }
 }

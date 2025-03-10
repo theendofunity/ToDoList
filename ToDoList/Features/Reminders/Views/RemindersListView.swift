@@ -21,6 +21,14 @@ struct RemindersListView: View {
     var body: some View {
         List($viewModel.reminders) { $reminder in
             RemindersListRowView(reminder: $reminder)
+                .swipeActions(edge: .trailing, allowsFullSwipe: true, content: {
+                    Button(role: .destructive, action: {
+                        viewModel.delete(reminder)
+                    }) {
+                        Image(systemName: "trash")
+                    }
+                    .tint(.red)
+                })
                 .onChange(of: reminder.isCompleted) { _, newValue in
                     viewModel.setCompleted(reminder, isCompleted: newValue)
                 }
