@@ -6,12 +6,13 @@
 //
 
 import Foundation
+import Factory
 
 final class RemindersListViewModel: ObservableObject {
     @Published var reminders: [Reminder] = []
     @Published var errorMessage: String?
     
-    private var remindersRepository: RemindersRepository = RemindersRepository()
+    @Injected(\.remindersRepository) private var remindersRepository
     
     init() {
         remindersRepository

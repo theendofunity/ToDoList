@@ -17,16 +17,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     ) -> Bool {
         FirebaseApp.configure()
         
-        let useEmulator = UserDefaults.standard.bool(forKey: "useEmulator")
-        
-        if useEmulator {
-            let settings = Firestore.firestore().settings
-            settings.host = "localhost:8080"
-            settings.isSSLEnabled = false
-            Firestore.firestore().settings = settings
-            Auth.auth().useEmulator(withHost: "localhost", port: 9099)
-        }
-        
         return true
     }
 }

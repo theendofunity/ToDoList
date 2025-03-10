@@ -7,10 +7,13 @@
 
 import FirebaseFirestore
 import Foundation
+import Factory
 
 public class RemindersRepository: ObservableObject {
     @Published
     var reminders = [Reminder]()
+    
+    @Injected(\.firestore) var firestore
     
     private var listenerRegistration: ListenerRegistration?
     
@@ -23,8 +26,7 @@ public class RemindersRepository: ObservableObject {
     }
     
     func addReminder(_ reminder: Reminder) throws {
-        try Firestore
-            .firestore()
+        try firestore
             .collection(Reminder.collectionName)
             .addDocument(from: reminder)
     }
@@ -34,26 +36,26 @@ public class RemindersRepository: ObservableObject {
             return
         }
         
-        let query = Firestore.firestore().collection(Reminder.collectionName)
+        let query = firestore.collection(Reminder.collectionName)
         
         listenerRegistration = query
             .addSnapshotListener { [weak self] snapshot, error in
-            guard let documents = snapshot?.documents else {
-                print("No documents")
-                return
-            }
-            
-            print("Mapping \(documents.count) documents")
-            self?.reminders =  documents.compactMap { documentSnapshot in
-                do {
-                    return try documentSnapshot.data(as: Reminder.self)
+                guard let documents = snapshot?.documents else {
+                    print("No documents")
+                    return
                 }
-                catch {
-                    print("Error while trying to map document \(documentSnapshot.documentID): \(error.localizedDescription)")
-                    return nil
+                
+                print("Mapping \(documents.count) documents")
+                self?.reminders =  documents.compactMap { documentSnapshot in
+                    do {
+                        return try documentSnapshot.data(as: Reminder.self)
+                    }
+                    catch {
+                        print("Error while trying to map document \(documentSnapshot.documentID): \(error.localizedDescription)")
+                        return nil
+                    }
                 }
             }
-        }
     }
     
     func update(_ reminder: Reminder) throws {
@@ -61,8 +63,7 @@ public class RemindersRepository: ObservableObject {
             return
         }
         
-        try Firestore
-            .firestore()
+        try firestore
             .collection(Reminder.collectionName)
             .document(documntId)
             .setData(from: reminder, merge: true)
@@ -73,8 +74,7 @@ public class RemindersRepository: ObservableObject {
             return
         }
         
-        Firestore
-            .firestore()
+        firestore
             .collection(Reminder.collectionName)
             .document(documntId)
             .delete()
