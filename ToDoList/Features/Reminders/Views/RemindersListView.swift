@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RemindersListView: View {
     @State private var isAddReminderDialogPresented = false
+    @State private var isSettingsScreenPresented = false
     
     @StateObject private var viewModel = RemindersListViewModel()
     
@@ -16,6 +17,10 @@ struct RemindersListView: View {
     
     private func presentAddReminderView() {
         isAddReminderDialogPresented.toggle()
+    }
+    
+    private func presentSettingsView() {
+        isSettingsScreenPresented.toggle()
     }
     
     var body: some View {
@@ -37,6 +42,12 @@ struct RemindersListView: View {
                 }
         }
         .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button(action: presentSettingsView) {
+                    Image(systemName: "gearshape")
+                }
+            }
+            
             ToolbarItemGroup(placement: .bottomBar) {
                 Button(action: presentAddReminderView) {
                     HStack {
@@ -57,6 +68,9 @@ struct RemindersListView: View {
                 viewModel.update(reminder: reminder)
             }
         }
+        .sheet(isPresented: $isSettingsScreenPresented, content: {
+            SettingsView()
+        })
         .tint(.purple)
     }
 }
