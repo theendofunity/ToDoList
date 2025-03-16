@@ -56,7 +56,7 @@ struct ProfileView: View {
                 VStack(alignment: .leading) {
                     Text("UID")
                         .font(.caption)
-                    Text(viewModel.uid ?? "(unknown)")
+                    Text(viewModel.user?.uid ?? "(unknown)")
                 }
                 VStack(alignment: .leading) {
                     Text("Provider")

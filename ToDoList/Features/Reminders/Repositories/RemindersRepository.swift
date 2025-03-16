@@ -8,17 +8,32 @@
 import FirebaseFirestore
 import Foundation
 import Factory
+import FirebaseAuth
+import Combine
 
 public class RemindersRepository: ObservableObject {
     @Published
     var reminders = [Reminder]()
     
+    @Published
+    var user: User? = nil
+    
     @Injected(\.firestore) var firestore
+    @Injected(\.authenticationService) var authenticationService
     
     private var listenerRegistration: ListenerRegistration?
+    private var cancelables = Set<AnyCancellable>()
     
     init() {
+        authenticationService.$user
+            .assign(to: &$user)
         subscribe()
+        
+        $user.sink { user in
+            self.unsubscribe()
+            self.subscribe(user: user)
+        }
+        .store(in: &cancelables)
     }
     
     deinit {
@@ -26,17 +41,21 @@ public class RemindersRepository: ObservableObject {
     }
     
     func addReminder(_ reminder: Reminder) throws {
+        var mutableReminder = reminder
+        mutableReminder.userId = user?.uid
+        
         try firestore
             .collection(Reminder.collectionName)
-            .addDocument(from: reminder)
+            .addDocument(from: mutableReminder)
     }
     
-    func subscribe() {
-        guard listenerRegistration == nil else {
+    func subscribe(user: User? = nil) {
+        guard listenerRegistration == nil, let localUser = user ?? self.user  else {
             return
         }
         
         let query = firestore.collection(Reminder.collectionName)
+            .whereField("userId", isEqualTo: localUser.uid)
         
         listenerRegistration = query
             .addSnapshotListener { [weak self] snapshot, error in

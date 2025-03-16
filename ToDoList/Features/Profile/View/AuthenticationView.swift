@@ -8,8 +8,19 @@
 import SwiftUI
 
 struct AuthenticationView: View {
+    @StateObject var viewModel = AuthenticationViewModel()
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            switch viewModel.flow {
+            case .login:
+                LoginView()
+                    .environmentObject(viewModel)
+            case .signUp:
+                SignUpView()
+                    .environmentObject(viewModel)
+            }
+        }
     }
 }
 
