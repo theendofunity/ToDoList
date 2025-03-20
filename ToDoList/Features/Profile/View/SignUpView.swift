@@ -54,9 +54,13 @@ struct SignUpView: View {
             }
             
             SignInWithAppleButton { request in
-                
+                viewModel.handleSignInWithAppleRequest(request)
             } onCompletion: { result in
-                
+                Task {
+                    if await viewModel.handleSignInWithAppleCompletion(result) {
+                        dismiss()
+                    }
+                }
             }
             .signInWithAppleButtonStyle(colorScheme == .light ? .black : .white)
             .frame(maxWidth: .infinity, minHeight: 50, maxHeight: 50)
